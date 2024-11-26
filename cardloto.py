@@ -5,31 +5,31 @@ class Cardloto:
 
     def __init__(self, name = 'My card'):
         self.__card = np.zeros((3, 9), dtype=int)  # Создаем пустую карточку
-        self.__generate()                                # Генерируем 15 цифр
+        self._generate()                                # Генерируем 15 цифр
         self.__del_keg = []                              # Создаем список, куда каписываем боченки, которые вычеркнули с карты
         self.name = name                                 # Название карточки
         self.__close_card = False                        # Закрыта ли вся карта
 
-    def __generate(self):
+    def _generate(self):
         for pole in range(3):
             count = 5  # Каждое поле вмещает 5 цифр
             for zona in range(3):
                 if count == 0:
                     break
 
-                count_zone = self.__get_count_zone(count, zona)
+                count_zone = self._get_count_zone(count, zona)
                 count -= count_zone
 
-                numbers = self.__generate_numbers(pole, zona, count_zone)
+                numbers = self._generate_numbers(pole, zona, count_zone)
                 sorted_numbers = np.sort(numbers)
 
                 # Генерируем строки, где будут находиться числа
                 str_number = np.random.choice(np.arange(0, 3), size=count_zone, replace=False)
 
                 # Вставляем цифры в карточку
-                self.__insert_numbers(sorted_numbers, str_number, zona, pole)
+                self._insert_numbers(sorted_numbers, str_number, zona, pole)
 
-    def __get_count_zone(self, count, zona):
+    def _get_count_zone(self, count, zona):
         # Определяет количество чисел для текущей зоны.
         count_zone = random.randint(1, min(3, count))
         if zona == 2:
@@ -38,7 +38,7 @@ class Cardloto:
             count_zone -= 1
         return count_zone
 
-    def __generate_numbers(self, pole, zona, count_zone):
+    def _generate_numbers(self, pole, zona, count_zone):
         # Генерирует лучайные числа для указанной зоны.
         if pole == 0 and zona == 0:
             return np.random.choice(np.arange(1, 10), size=count_zone, replace=False)
@@ -46,7 +46,7 @@ class Cardloto:
             num_zone = zona * 10 + pole * 30
             return np.random.choice(np.arange(num_zone, num_zone + 10), size=count_zone, replace=False)
 
-    def __insert_numbers(self, sorted_numbers, str_number, zona, pole):
+    def _insert_numbers(self, sorted_numbers, str_number, zona, pole):
         # Вставляет сгенерированные числа в карточку.
         for count_numbers, s in enumerate(str_number):
             self.__card[s, zona + pole * 3] = sorted_numbers[count_numbers]
@@ -67,20 +67,15 @@ class Cardloto:
             print(array_str[1:-1].replace(',', ' ').replace('-1', '--').replace(' 0', '  '))
         print('-' * 35)
 
-
-    def get_card(self):
+    @property
+    def card(self):
         return self.__card
 
-    def get_del_keg(self):
+    @property
+    def del_keg(self):
         return self.__del_keg
 
-    def get_close(self):
+    @property
+    def close(self):
         return self.__close_card
 
-if __name__ == '__main__':
-    my_loto = Cardloto()
-    my_loto.show_card()
-    print(my_loto.check_keg(15))
-    my_loto.show_card()
-    card = my_loto.get_card()
-    print(card[card>0])
