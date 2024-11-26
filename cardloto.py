@@ -78,3 +78,4 @@ class Cardloto:
     @property
     def close(self):
         return self.__close_card
+
