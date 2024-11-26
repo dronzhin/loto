@@ -9,9 +9,9 @@ def random_element(array):
     random_element = np.random.choice(array)
 
     # Удаляем выбранный элемент из массива
-    array = np.delete(array, np.where(array == random_element)[0][0])
+    new_array = np.delete(array, np.where(array == random_element)[0][0])
 
-    return random_element
+    return random_element, new_array
 
 def answer():
     while 1:
@@ -32,7 +32,7 @@ game_finish = True
 # Запускаем игру
 while game_finish:
 
-    number = random_element(numbers)
+    number, numbers = random_element(numbers)
     computer_card.check_keg(number)
     computer_card.show_card()
     gamer_card.show_card()
@@ -53,6 +53,10 @@ while game_finish:
 
     if computer_card.get_close() or gamer_card.get_close():
         game_finish = False
+        if computer_card.get_close():
+            print('Компьтер выиграл')
+        else:
+            print("Человек выиграл")
 
 
 
